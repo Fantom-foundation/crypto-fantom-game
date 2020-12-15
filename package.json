@@ -1,0 +1,41 @@
+{
+  "name": "contracts-repo",
+  "version": "1.0.0",
+  "description": "Template Repository",
+  "main": "index.js",
+  "scripts": {
+    "test": "truffle test",
+    "prettier": "npx prettier --write 'contracts/**/*.sol'",
+    "test:coverage": "npx truffle run coverage",
+    "lint": "npm run lint:sol && npm run lint:js",
+    "lint:sol": "solhint \"contracts/**/*.sol\"",
+    "lint:js": "eslint \"test/*.js\"",
+    "build": "truffle build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fantom-foundation/contracts-repo.git"
+  },
+  "author": "Fantom Foundation",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.3.0-solc-0.7",
+    "truffle-flattener": "^1.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "prettier": "^2.2.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.2",
+    "solhint": "^3.3.2",
+    "solhint-plugin-prettier": "^0.0.5",
+    "solidity-coverage": "^0.7.13",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "truffle-plugin-verify": "^0.5.2"
+  },
+  "bugs": {
+    "url": "https://github.com/Fantom-foundation/contracts-repo/issues"
+  },
+  "homepage": "https://github.com/Fantom-foundation/contracts-repo#readme"
+}
