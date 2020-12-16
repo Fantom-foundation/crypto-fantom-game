@@ -1,6 +1,6 @@
 {
-  "name": "contracts-repo",
-  "version": "1.0.0",
+  "name": "crypto-fantom-game",
+  "version": "1.0.0-RC1",
   "description": "Template Repository",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fantom-foundation/contracts-repo.git"
+    "url": "git+https://github.com/Fantom-foundation/crypto-fantom-game.git"
   },
   "author": "Fantom Foundation",
   "license": "MIT",
@@ -38,7 +38,15 @@
     "truffle-plugin-verify": "^0.5.2"
   },
   "bugs": {
-    "url": "https://github.com/Fantom-foundation/contracts-repo/issues"
+    "url": "https://github.com/Fantom-foundation/crypto-fantom-game/issues"
   },
-  "homepage": "https://github.com/Fantom-foundation/contracts-repo#readme"
+  "homepage": "https://github.com/Fantom-foundation/crypto-fantom-game#readme",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "nft",
+    "collectibles",
+    "erc721"
+  ]
 }
