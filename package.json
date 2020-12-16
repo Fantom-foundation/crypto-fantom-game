@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "truffle test",
-    "prettier": "npx prettier --write 'contracts/**/*.sol'",
     "test:coverage": "npx truffle run coverage",
     "lint": "npm run lint:sol && npm run lint:js",
     "lint:sol": "solhint \"contracts/**/*.sol\"",
     "lint:js": "eslint \"test/*.js\"",
+    "lint:fix": "npm run lint:fix-sol && npm run lint:fix-js",
+    "lint:fix-sol": "npx prettier --write 'contracts/**/*.sol'",
+    "lint:fix-js": "npx prettier --write '**/*.js'",
     "build": "truffle build"
   },
   "repository": {
