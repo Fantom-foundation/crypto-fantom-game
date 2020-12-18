@@ -135,19 +135,15 @@ contract ERC721Token is IERC721 {
     mapping(uint256 => address) private idToApproved;
     mapping(address => mapping(address => bool)) private ownerToOperators;
     bytes4 internal constant MAGIC_ON_ERC721_RECEIVED = 0x150b7a02;
-    address public admin;
-    uint256 public nextTokenId;
+    mapping(uint256 => string) private tokenURIs;
+    string public tokenURIBase;
 
-    constructor() {
-        admin = msg.sender;
+    constructor(string memory _tokenURIBase) {
+        tokenURIBase = _tokenURIBase;
     }
 
-    function mint() external {
-        require(msg.sender == admin, "only admin");
-        ownerToTokenCount[msg.sender]++;
-        idToOwner[nextTokenId] = msg.sender;
-        emit Transfer(address(0), msg.sender, nextTokenId);
-        nextTokenId++;
+    function tokenURI(uint256 _tokenId) external view returns (string memory) {
+        return string(abi.encodePacked(tokenURIBase, _tokenId));
     }
 
     function balanceOf(address _owner)
@@ -159,12 +155,7 @@ contract ERC721Token is IERC721 {
         return ownerToTokenCount[_owner];
     }
 
-    function ownerOf(uint256 _tokenId)
-        external
-        view
-        override
-        returns (address)
-    {
+    function ownerOf(uint256 _tokenId) public view override returns (address) {
         return idToOwner[_tokenId];
     }
 
@@ -262,6 +253,16 @@ contract ERC721Token is IERC721 {
         ownerToTokenCount[_to] += 1;
         idToOwner[_tokenId] = _to;
         emit Transfer(_from, _to, _tokenId);
+    }
+
+    function _mint(address _owner, uint256 _tokenId) internal {
+        require(
+            idToOwner[_tokenId] == address(0),
+            "This token already exist..."
+        );
+        idToOwner[_tokenId] = _owner;
+        ownerToTokenCount[_owner] += 1;
+        emit Transfer(address(0), _owner, _tokenId);
     }
 
     modifier canTransfer(uint256 _tokenId) {
