@@ -1,12 +1,12 @@
 {
   "name": "crypto-fantom-game",
   "version": "1.0.0-RC1",
-  "description": "Template Repository",
+  "description": "Fantom collectibles",
   "main": "index.js",
   "scripts": {
     "test": "truffle test",
     "test:coverage": "npx truffle run coverage",
-    "lint": "npm run lint:sol && npm run lint:js",
+    "lint": "npm run lint:sol",
     "lint:sol": "solhint \"contracts/**/*.sol\"",
     "lint:js": "eslint \"test/*.js\"",
     "lint:fix": "npm run lint:fix-sol && npm run lint:fix-js",
