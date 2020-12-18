@@ -1,5 +1,5 @@
-const ERC721Token = artifacts.require("ERC721Token.sol");
+const CryptoFantom = artifacts.require("CryptoFantomGame.sol");
 
 module.exports = function (deployer) {
-  deployer.deploy(ERC721Token);
+  deployer.deploy(CryptoFantom, "https://url-to-your-game-server");
 };
