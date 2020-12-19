@@ -1,39 +1,25 @@
-//SPDX-License-Identifier: MIT
-
 pragma solidity ^0.7.3;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
-interface IERC721 {
+interface IERC721 /* is ERC165 */ {
     /// @dev This emits when ownership of any NFT changes by any mechanism.
     ///  This event emits when NFTs are created (`from` == 0) and destroyed
     ///  (`to` == 0). Exception: during contract creation, any number of NFTs
     ///  may be created and assigned without emitting Transfer. At the time of
     ///  any transfer, the approved address for that NFT (if any) is reset to none.
-    event Transfer(
-        address indexed _from,
-        address indexed _to,
-        uint256 indexed _tokenId
-    );
+    event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
 
     /// @dev This emits when the approved address for an NFT is changed or
     ///  reaffirmed. The zero address indicates there is no approved address.
     ///  When a Transfer event emits, this also indicates that the approved
     ///  address for that NFT (if any) is reset to none.
-    event Approval(
-        address indexed _owner,
-        address indexed _approved,
-        uint256 indexed _tokenId
-    );
+    event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId);
 
     /// @dev This emits when an operator is enabled or disabled for an owner.
     ///  The operator can manage all NFTs of the owner.
-    event ApprovalForAll(
-        address indexed _owner,
-        address indexed _operator,
-        bool _approved
-    );
+    event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved);
 
     /// @notice Count all NFTs assigned to an owner
     /// @dev NFTs assigned to the zero address are considered invalid, and this
@@ -61,12 +47,7 @@ interface IERC721 {
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
     /// @param data Additional data with no specified format, sent in call to `_to`
-    function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId,
-        bytes calldata data
-    ) external payable;
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes calldata data) external payable;
 
     /// @notice Transfers the ownership of an NFT from one address to another address
     /// @dev This works identically to the other function with an extra data parameter,
@@ -74,11 +55,7 @@ interface IERC721 {
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
-    function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) external payable;
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId) external payable;
 
     /// @notice Transfer ownership of an NFT -- THE CALLER IS RESPONSIBLE
     ///  TO CONFIRM THAT `_to` IS CAPABLE OF RECEIVING NFTS OR ELSE
@@ -90,11 +67,7 @@ interface IERC721 {
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
-    function transferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) external payable;
+    function transferFrom(address _from, address _to, uint256 _tokenId) external payable;
 
     /// @notice Change or reaffirm the approved address for an NFT
     /// @dev The zero address indicates there is no approved address.
@@ -122,157 +95,97 @@ interface IERC721 {
     /// @param _owner The address that owns the NFTs
     /// @param _operator The address that acts on behalf of the owner
     /// @return True if `_operator` is an approved operator for `_owner`, false otherwise
-    function isApprovedForAll(address _owner, address _operator)
-        external
-        view
-        returns (bool);
+    function isApprovedForAll(address _owner, address _operator) external view returns (bool);
 }
 
 contract ERC721Token is IERC721 {
     using Address for address;
-    mapping(address => uint256) private ownerToTokenCount;
-    mapping(uint256 => address) private idToOwner;
-    mapping(uint256 => address) private idToApproved;
+    mapping(address => uint) private ownerToTokenCount;
+    mapping(uint => address) private idToOwner;
+    mapping(uint => address) private idToApproved;
     mapping(address => mapping(address => bool)) private ownerToOperators;
     bytes4 internal constant MAGIC_ON_ERC721_RECEIVED = 0x150b7a02;
-    mapping(uint256 => string) private tokenURIs;
+    mapping(uint => string) private tokenURIs;
     string public tokenURIBase;
 
     constructor(string memory _tokenURIBase) {
-        tokenURIBase = _tokenURIBase;
+      tokenURIBase = _tokenURIBase;
     }
 
-    function tokenURI(uint256 _tokenId) external view returns (string memory) {
-        return string(abi.encodePacked(tokenURIBase, _tokenId));
+    function tokenURI(uint _tokenId) external view returns(string memory) {
+      return string(abi.encodePacked(tokenURIBase, _tokenId));
     }
 
-    function balanceOf(address _owner)
-        external
-        view
-        override
-        returns (uint256)
-    {
+    function balanceOf(address _owner) external override view returns(uint) {
         return ownerToTokenCount[_owner];
     }
 
-    function ownerOf(uint256 _tokenId) public view override returns (address) {
+    function ownerOf(uint256 _tokenId) public override view returns (address) {
         return idToOwner[_tokenId];
     }
 
-    function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId,
-        bytes calldata data
-    ) external payable override {
+    function safeTransferFrom(address _from, address _to, uint _tokenId, bytes calldata data) external override payable {
         _safeTransferFrom(_from, _to, _tokenId, data);
     }
 
-    function safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) external payable override {
+    function safeTransferFrom(address _from, address _to, uint _tokenId) external override payable {
         _safeTransferFrom(_from, _to, _tokenId, "");
     }
 
-    function transferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) external payable override {
+    function transferFrom(address _from, address _to, uint _tokenId) external override payable {
         _transfer(_from, _to, _tokenId);
     }
 
-    function approve(address _approved, uint256 _tokenId)
-        external
-        payable
-        override
-    {
+    function approve(address _approved, uint _tokenId) external override payable {
         address owner = idToOwner[_tokenId];
-        require(msg.sender == owner, "Not authorized");
+        require(msg.sender == owner, 'Not authorized');
         idToApproved[_tokenId] = _approved;
         emit Approval(owner, _approved, _tokenId);
     }
 
-    function setApprovalForAll(address _operator, bool _approved)
-        external
-        override
-    {
+    function setApprovalForAll(address _operator, bool _approved) external override {
         ownerToOperators[msg.sender][_operator] = _approved;
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 
-    function getApproved(uint256 _tokenId)
-        external
-        view
-        override
-        returns (address)
-    {
+    function getApproved(uint _tokenId) external override view returns (address) {
         return idToApproved[_tokenId];
     }
 
-    function isApprovedForAll(address _owner, address _operator)
-        external
-        view
-        override
-        returns (bool)
-    {
+    function isApprovedForAll(address _owner, address _operator) external override view returns (bool) {
         return ownerToOperators[_owner][_operator];
     }
 
-    function _safeTransferFrom(
-        address _from,
-        address _to,
-        uint256 _tokenId,
-        bytes memory data
-    ) internal {
-        _transfer(_from, _to, _tokenId);
+    function _safeTransferFrom(address _from, address _to, uint _tokenId, bytes memory data) internal {
+       _transfer(_from, _to, _tokenId);
 
-        if (_to.isContract()) {
-            bytes4 retval =
-                IERC721Receiver(_to).onERC721Received(
-                    msg.sender,
-                    _from,
-                    _tokenId,
-                    data
-                );
-            require(
-                retval == MAGIC_ON_ERC721_RECEIVED,
-                "recipient SC cannot handle ERC721 tokens"
-            );
+        if(_to.isContract()) {
+            bytes4 retval = IERC721Receiver(_to).onERC721Received(msg.sender, _from, _tokenId, data);
+            require(retval == MAGIC_ON_ERC721_RECEIVED, 'recipient SC cannot handle ERC721 tokens');
         }
     }
 
-    function _transfer(
-        address _from,
-        address _to,
-        uint256 _tokenId
-    ) internal canTransfer(_tokenId) {
+    function _transfer(address _from, address _to, uint _tokenId)
+        internal
+        canTransfer(_tokenId) {
         ownerToTokenCount[_from] -= 1;
         ownerToTokenCount[_to] += 1;
         idToOwner[_tokenId] = _to;
         emit Transfer(_from, _to, _tokenId);
     }
 
-    function _mint(address _owner, uint256 _tokenId) internal {
-        require(
-            idToOwner[_tokenId] == address(0),
-            "This token already exist..."
-        );
+    function _mint(address _owner, uint _tokenId) internal {
+        require(idToOwner[_tokenId] == address(0), 'This token already exist..');
         idToOwner[_tokenId] = _owner;
         ownerToTokenCount[_owner] += 1;
         emit Transfer(address(0), _owner, _tokenId);
     }
 
-    modifier canTransfer(uint256 _tokenId) {
+    modifier canTransfer(uint _tokenId) {
         address owner = idToOwner[_tokenId];
-        require(
-            owner == msg.sender ||
-                idToApproved[_tokenId] == msg.sender ||
-                ownerToOperators[owner][msg.sender] == true,
-            "Transfer not authorized"
-        );
+        require(owner == msg.sender
+            || idToApproved[_tokenId] == msg.sender
+            || ownerToOperators[owner][msg.sender] == true, 'Transfer not authorized');
         _;
     }
 }
