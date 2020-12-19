@@ -8,17 +8,17 @@ const { ContractForm } = newContextComponents;
 export default () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const { drizzle } = useDrizzle();
-  const state = useDrizzleState(state => state);
+  const state = useDrizzleState((state) => state);
 
   useEffect(() => {
     const init = async () => {
       const admin = await drizzle.contracts.CryptoFantom.methods.admin().call();
       setIsAdmin(admin.toLowerCase() === state.accounts[0].toLowerCase());
-    }
+    };
     init();
   });
 
-  if(!isAdmin) {
+  if (!isAdmin) {
     return null;
   }
 
@@ -26,11 +26,7 @@ export default () => {
     <div>
       <div>
         <h2>Mint</h2>
-        <ContractForm
-          drizzle={drizzle}
-          contract="CryptoFantom"
-          method="mint"
-        />
+        <ContractForm drizzle={drizzle} contract="CryptoFantom" method="mint" />
       </div>
     </div>
   );

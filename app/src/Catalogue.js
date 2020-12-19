@@ -8,7 +8,7 @@ const { ContractData } = newContextComponents;
 
 export default () => {
   const { drizzle } = useDrizzle();
-  const state = useDrizzleState(state => state);
+  const state = useDrizzleState((state) => state);
 
   return (
     <div>
@@ -19,18 +19,15 @@ export default () => {
           drizzleState={state}
           contract="CryptoFantom"
           method="tokenURIBase"
-          render={uriBase => {
+          render={(uriBase) => {
             return (
               <ContractData
                 drizzle={drizzle}
                 drizzleState={state}
                 contract="CryptoFantom"
                 method="getAllFantoms"
-                render={fantoms => (
-                  <FantomList
-                    fantoms={fantoms}
-                    uriBase={uriBase}
-                  />
+                render={(fantoms) => (
+                  <FantomList fantoms={fantoms} uriBase={uriBase} />
                 )}
               />
             );

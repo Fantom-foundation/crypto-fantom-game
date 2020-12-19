@@ -10,7 +10,7 @@ export default ({ fantoms, uriBase }) => (
       <th>Pic</th>
     </thead>
     <tbody>
-      {fantoms.map(fantom => (
+      {fantoms.map((fantom) => (
         <tr key={fantom.id}>
           <td>{fantom.id}</td>
           <td>{fantom.generation}</td>
@@ -18,7 +18,7 @@ export default ({ fantoms, uriBase }) => (
           <td>{fantom.geneB}</td>
           <td>
             <img
-              style={{width: "50px", height: "50px"}}
+              style={{ width: "50px", height: "50px" }}
               src={`${uriBase}/${fantom.id}`}
             />
           </td>

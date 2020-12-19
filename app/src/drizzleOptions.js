@@ -1,7 +1,7 @@
-import CryptoFantom from './contracts/CryptoFantom.json';
+import CryptoFantom from "./contracts/CryptoFantom.json";
 
 const options = {
-  contracts: [CryptoFantom]
+  contracts: [CryptoFantom],
 };
 
 export default options;
