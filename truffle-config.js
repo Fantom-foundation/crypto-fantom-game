@@ -54,6 +54,12 @@ module.exports = {
       network_id: 250,
       symbol: "FTM",
     },
+    testnet: {
+      host: "3.236.69.238",
+      port: 8545,
+      network_id: 4002,
+      symbol: "FTM",
+    },
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
