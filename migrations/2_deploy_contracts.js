@@ -1,5 +1,13 @@
-const CryptoFantom = artifacts.require("CryptoFantomGame.sol");
+const CryptoFantom = artifacts.require("CryptoFantom.sol");
 
-module.exports = function (deployer) {
-  deployer.deploy(CryptoFantom, "https://url-to-your-game-server");
+module.exports = async function(deployer) {
+  await deployer.deploy(CryptoFantom, "https://ftm.com");
+  const game = await CryptoFantom.deployed();
+  await Promise.all([
+    game.mint(),
+    game.mint(),
+    game.mint(),
+    game.mint()
+  ]);
+  console.log(await game.getAllFantoms());
 };
