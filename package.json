@@ -1,20 +1,22 @@
 {
-  "name": "contracts-repo",
-  "version": "1.0.0",
-  "description": "Template Repository",
+  "name": "crypto-fantom-game",
+  "version": "1.0.0-RC1",
+  "description": "Fantom collectibles",
   "main": "index.js",
   "scripts": {
     "test": "truffle test",
-    "prettier": "npx prettier --write 'contracts/**/*.sol'",
     "test:coverage": "npx truffle run coverage",
-    "lint": "npm run lint:sol && npm run lint:js",
+    "lint": "npm run lint:sol",
     "lint:sol": "solhint \"contracts/**/*.sol\"",
     "lint:js": "eslint \"test/*.js\"",
+    "lint:fix": "npm run lint:fix-sol && npm run lint:fix-js",
+    "lint:fix-sol": "npx prettier --write 'contracts/**/*.sol'",
+    "lint:fix-js": "npx prettier --write '**/*.js'",
     "build": "truffle build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fantom-foundation/contracts-repo.git"
+    "url": "git+https://github.com/Fantom-foundation/crypto-fantom-game.git"
   },
   "author": "Fantom Foundation",
   "license": "MIT",
@@ -23,6 +25,7 @@
     "truffle-flattener": "^1.5.0"
   },
   "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.9",
     "eslint": "^7.15.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
@@ -35,7 +38,15 @@
     "truffle-plugin-verify": "^0.5.2"
   },
   "bugs": {
-    "url": "https://github.com/Fantom-foundation/contracts-repo/issues"
+    "url": "https://github.com/Fantom-foundation/crypto-fantom-game/issues"
   },
-  "homepage": "https://github.com/Fantom-foundation/contracts-repo#readme"
+  "homepage": "https://github.com/Fantom-foundation/crypto-fantom-game#readme",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "nft",
+    "collectibles",
+    "erc721"
+  ]
 }
