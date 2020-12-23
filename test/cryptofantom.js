@@ -1,5 +1,5 @@
 const { expectRevert, expectEvent } = require("@openzeppelin/test-helpers");
-const Game = artifacts.require("CryptoFantomGame.sol");
+const Game = artifacts.require("CryptoFantom.sol");
 const FakeBadRecipient = artifacts.require("FakeBadRecipient.sol");
 
 contract("Game", (accounts) => {
