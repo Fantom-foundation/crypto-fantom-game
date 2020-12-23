@@ -1,10 +1,10 @@
-//SPDX-License-Identifier: MIT
-
 pragma solidity ^0.7.3;
+pragma experimental ABIEncoderV2;
 
 import "./ERC721Token.sol";
 
-contract CryptoFantomGame is ERC721Token {
+contract CryptoFantom is ERC721Token {
+
     struct Fantom {
         uint256 id;
         uint256 generation;
@@ -15,10 +15,43 @@ contract CryptoFantomGame is ERC721Token {
     uint256 public nextId;
     address public admin;
 
-    constructor(string memory _tokenURIBase) ERC721Token(_tokenURIBase) {
+    constructor(string memory _tokenURIBase) public ERC721Token(_tokenURIBase) {
         admin = msg.sender;
     }
 
+    /// @notice Returns all the IDs of all FantomNFTs ever created
+    function getAllFantoms() external view returns (Fantom[] memory) {
+        Fantom[] memory _fantoms = new Fantom[](nextId);
+        for (uint256 i = 0; i < _fantoms.length; i++) {
+            _fantoms[i] = fantoms[i];
+        }
+        return _fantoms;
+    }
+
+    /// @notice Returns all FantomNFTs of a specific owner.
+    /// @param owner The address of the owner to check.
+    function getAllFantomsOf(address owner)
+        external
+        view
+        returns (Fantom[] memory)
+    {
+        uint256 length;
+        for (uint256 i = 0; i < nextId; i++) {
+            if (ownerOf(i) == owner) {
+                length++;
+            }
+        }
+        Fantom[] memory _fantoms = new Fantom[](length);
+        for (uint256 i = 0; i < _fantoms.length; i++) {
+            if (ownerOf(i) == owner) {
+                _fantoms[i] = fantoms[i];
+            }
+        }
+        return _fantoms;
+    }
+
+    /// @dev function to initiate breeding, assumes that all breeding
+    /// requirements have been checked.
     function breed(uint256 fantom1Id, uint256 fantom2Id) external {
         require(
             fantom1Id < nextId && fantom2Id < nextId,
@@ -27,7 +60,8 @@ contract CryptoFantomGame is ERC721Token {
         Fantom storage fantom1 = fantoms[fantom1Id];
         Fantom storage fantom2 = fantoms[fantom2Id];
         require(
-            ownerOf(fantom1Id) == msg.sender && ownerOf(fantom2Id) == msg.sender,
+            ownerOf(fantom1Id) == msg.sender &&
+                ownerOf(fantom2Id) == msg.sender,
             "msg.sender must own the 2 fantoms"
         );
         uint256 baseGen =
@@ -41,6 +75,8 @@ contract CryptoFantomGame is ERC721Token {
         nextId++;
     }
 
+    /// @dev function to create randomly a Fantom NFT
+    /// only Admin can call this function
     function mint() external {
         require(msg.sender == admin, "only admin");
         fantoms[nextId] = Fantom(nextId, 1, _random(10), _random(10));
