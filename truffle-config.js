@@ -1,3 +1,10 @@
+const path = require('path');
+const fs = require('fs');
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+
+const secrets = JSON.parse(
+  fs.readFileSync('.secrets').toString().trim()
+);
 /**
  * Use this file to configure your truffle project. It's seeded with some
  * common settings for different networks and features like migrations,
@@ -42,23 +49,25 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    // development: {
-    // host: "127.0.0.1",     // Localhost (default: none)
-    // port: 9545,            // Standard Ethereum port (default: none)
-    // network_id: "*",       // Any network (default: none)
-    // },
+    testrpc: {
+      host: 'localhost',
+      port: 8545,
+      network_id: '1337',
+    },
 
     fantom: {
-      host: "52.215.226.235",
+      host: '52.215.226.235',
       port: 8545,
       network_id: 250,
-      symbol: "FTM",
+      symbol: 'FTM',
     },
     testnet: {
-      host: "3.236.69.238",
+      provider: () => new HDWalletProvider(secrets.private, "https://xapi.testnet.fantom.network/lachesis"),
+      // host: "3.236.69.238",
       port: 8545,
       network_id: 4002,
-      symbol: "FTM",
+      symbol: 'FTM',
+      gas: 0,
     },
     // Another network with more advanced options...
     // advanced: {
@@ -93,9 +102,10 @@ module.exports = {
   },
 
   // Configure your compilers
+  contracts_build_directory: path.join(__dirname, 'app/src/contracts'),
   compilers: {
     solc: {
-      version: "^0.7.3", // Fetch exact version from solc-bin (default: truffle's version)
+      version: '^0.5.17', // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {
         // See the solidity docs for advice about optimization and evmVersion
@@ -107,5 +117,5 @@ module.exports = {
       },
     },
   },
-  plugins: ["truffle-plugin-verify", "solidity-coverage"],
+  plugins: ['truffle-plugin-verify', 'solidity-coverage'],
 };

@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: MIT
 
-pragma solidity ^0.7.3;
+pragma solidity ^0.5.17;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
@@ -138,7 +138,7 @@ contract ERC721Token is IERC721 {
     mapping(uint256 => string) private tokenURIs;
     string public tokenURIBase;
 
-    constructor(string memory _tokenURIBase) {
+    constructor(string memory _tokenURIBase) public {
         tokenURIBase = _tokenURIBase;
     }
 
@@ -154,7 +154,6 @@ contract ERC721Token is IERC721 {
     function balanceOf(address _owner)
         external
         view
-        override
         returns (uint256)
     {
         return ownerToTokenCount[_owner];
@@ -165,7 +164,7 @@ contract ERC721Token is IERC721 {
     ///  about them do throw.
     /// @param _tokenId The identifier for an NFT
     /// @return The address of the owner of the NFT
-    function ownerOf(uint256 _tokenId) public view override returns (address) {
+    function ownerOf(uint256 _tokenId) public view returns (address) {
         return idToOwner[_tokenId];
     }
 
@@ -180,7 +179,7 @@ contract ERC721Token is IERC721 {
         address _to,
         uint256 _tokenId,
         bytes calldata data
-    ) external payable override {
+    ) external payable {
         _safeTransferFrom(_from, _to, _tokenId, data);
     }
 
@@ -200,7 +199,7 @@ contract ERC721Token is IERC721 {
         address _from,
         address _to,
         uint256 _tokenId
-    ) external payable override {
+    ) external payable {
         _safeTransferFrom(_from, _to, _tokenId, "");
     }
 
@@ -218,7 +217,7 @@ contract ERC721Token is IERC721 {
         address _from,
         address _to,
         uint256 _tokenId
-    ) external payable override {
+    ) external payable {
         _transfer(_from, _to, _tokenId);
     }
 
@@ -231,7 +230,6 @@ contract ERC721Token is IERC721 {
     function approve(address _approved, uint256 _tokenId)
         external
         payable
-        override
     {
         address owner = idToOwner[_tokenId];
         require(msg.sender == owner, "Not authorized");
@@ -247,7 +245,6 @@ contract ERC721Token is IERC721 {
     /// @param _approved True if the operator is approved, false to revoke approval
     function setApprovalForAll(address _operator, bool _approved)
         external
-        override
     {
         ownerToOperators[msg.sender][_operator] = _approved;
         emit ApprovalForAll(msg.sender, _operator, _approved);
@@ -260,7 +257,6 @@ contract ERC721Token is IERC721 {
     function getApproved(uint256 _tokenId)
         external
         view
-        override
         returns (address)
     {
         return idToApproved[_tokenId];
@@ -273,7 +269,6 @@ contract ERC721Token is IERC721 {
     function isApprovedForAll(address _owner, address _operator)
         external
         view
-        override
         returns (bool)
     {
         return ownerToOperators[_owner][_operator];

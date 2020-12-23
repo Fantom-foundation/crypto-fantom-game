@@ -1,4 +1,4 @@
-pragma solidity ^0.7.3;
+pragma solidity ^0.5.17;
 pragma experimental ABIEncoderV2;
 
 import "./ERC721Token.sol";
