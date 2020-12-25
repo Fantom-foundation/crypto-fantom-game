@@ -4,7 +4,6 @@ pragma experimental ABIEncoderV2;
 import "./ERC721Token.sol";
 
 contract CryptoFantom is ERC721Token {
-
     struct Fantom {
         uint256 id;
         uint256 generation;

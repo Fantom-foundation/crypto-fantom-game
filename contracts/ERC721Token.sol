@@ -151,11 +151,7 @@ contract ERC721Token is IERC721 {
     ///  function throws for queries about the zero address.
     /// @param _owner An address for whom to query the balance
     /// @return The number of NFTs owned by `_owner`, possibly zero
-    function balanceOf(address _owner)
-        external
-        view
-        returns (uint256)
-    {
+    function balanceOf(address _owner) external view returns (uint256) {
         return ownerToTokenCount[_owner];
     }
 
@@ -227,10 +223,7 @@ contract ERC721Token is IERC721 {
     ///  operator of the current owner.
     /// @param _approved The new approved NFT controller
     /// @param _tokenId The NFT to approve
-    function approve(address _approved, uint256 _tokenId)
-        external
-        payable
-    {
+    function approve(address _approved, uint256 _tokenId) external payable {
         address owner = idToOwner[_tokenId];
         require(msg.sender == owner, "Not authorized");
         idToApproved[_tokenId] = _approved;
@@ -243,9 +236,7 @@ contract ERC721Token is IERC721 {
     ///  multiple operators per owner.
     /// @param _operator Address to add to the set of authorized operators.
     /// @param _approved True if the operator is approved, false to revoke approval
-    function setApprovalForAll(address _operator, bool _approved)
-        external
-    {
+    function setApprovalForAll(address _operator, bool _approved) external {
         ownerToOperators[msg.sender][_operator] = _approved;
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
@@ -254,11 +245,7 @@ contract ERC721Token is IERC721 {
     /// @dev Throws if `_tokenId` is not a valid NFT
     /// @param _tokenId The NFT to find the approved address for
     /// @return The approved address for this NFT, or the zero address if there is none
-    function getApproved(uint256 _tokenId)
-        external
-        view
-        returns (address)
-    {
+    function getApproved(uint256 _tokenId) external view returns (address) {
         return idToApproved[_tokenId];
     }
 

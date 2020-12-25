@@ -56,4 +56,5 @@ $ npm run start
 ```
 
 ## Issues
-You may encounter some problems with the current version of Metamask which does not detect the correct nonce, you can switch from network to Mainnet and then back to Local that solves most of the issues until a correction is made.
+You may encounter some problems with the current version of Metamask which does not detect the correct nonce,
+you can switch from network to Mainnet and then back to Local that solves most of the issues until a correction is made.
